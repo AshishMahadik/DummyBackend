@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="/public/stylesheet/email-list.css")
+    title Email List
+      
+  body 
+      h3 Local Mailbox 
+        small= `${loginEmail} --`  
+          a.logouta(href="/email")  Logout 
+      if isAvail 
+        #body.body 
+          h4 Mailbox looking a little lonely. New messages are on the way!
+      else 
+        #body.body 
+          each email of emails
+            a.item(href=`/email/view/${email._id}`)
+              .subject 
+                =`${email.subject}`
+              .date
+                =`${new Date(email.createdAt).toLocaleString()}`
+            
+

@@ -1,0 +1,7 @@
+[Tuesday, July 16, 2024 4:29 PM] "GET /email" - 200 - 645.969 ms
+[Tuesday, July 16, 2024 4:30 PM] "GET /email/aniket@gmail.com" - 200 - 1545.274 ms
+[Tuesday, July 16, 2024 4:31 PM] "GET /email/aniket@gmail.com" - 200 - 2038.542 ms
+[Tuesday, July 16, 2024 4:31 PM] "GET /email/view/64f5afdcfc74a74f70d05441" - 200 - 283.525 ms
+[Tuesday, July 16, 2024 4:33 PM] "GET /email" - 304 - 377.464 ms
+[Tuesday, July 16, 2024 4:33 PM] "GET /email/aniket@gmail.com" - 200 - 1493.013 ms
+[Tuesday, July 16, 2024 4:33 PM] "GET /email/view/66965323eacda2e67ab25349" - 200 - 314.964 ms

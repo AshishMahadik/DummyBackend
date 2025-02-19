@@ -1,0 +1,24 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet", href="/public/stylesheet/email-view.css")
+    title Email List
+      
+  body 
+    #container 
+      .header 
+        .items 
+          a.back(onclick="window.history.back()") ⬅
+          .item 
+            label From: 
+              span#from #{email.from} 
+          .item 
+            label To: 
+              span#to #{email.to}
+          .item 
+            label Subject: 
+              span#subject #{email.subject} 
+      #text.body 
+        | !{email.html}

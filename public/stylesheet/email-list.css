@@ -1,0 +1,60 @@
+body {
+  margin: 0 !important;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h3 {
+  max-width: 860px;
+  margin: 20px auto;
+  padding: 15px 20px;
+  background-color: #333;
+  border-radius: 5px;
+  color: #fff;
+}
+
+h4 {
+  text-align: center;
+  margin-top: 65px;
+  font-size: 20px;
+}
+
+small {
+  float: right;
+}
+
+.logouta {
+  color: #fff;
+  font-weight: normal;
+  text-decoration: none;
+}
+
+.body {
+  max-width: 900px;
+  margin: auto;
+}
+
+.body .item {
+  background-color: #eee;
+  border: 1px solid #eee;
+  padding: 15px 20px;
+  border-radius: 5px;
+  display: block;
+  text-decoration: none;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.body .item:hover {
+  border: 1px solid #777;
+}
+
+.item .subject {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.item .date {
+  font-size: 14px;
+  color: #555;
+}

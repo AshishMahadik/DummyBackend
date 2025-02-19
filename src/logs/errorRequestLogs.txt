@@ -1,0 +1,2 @@
+[Tuesday, July 16, 2024 4:29 PM] "GET /" - 400 - 24.556 ms
+[Tuesday, July 16, 2024 4:29 PM] "GET /" - 400 - 7.545 ms
