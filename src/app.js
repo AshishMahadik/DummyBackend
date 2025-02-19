@@ -45,7 +45,7 @@ app.use('/', viewRoutes);
 
 // app.use(secureApiWithkey);   // Enables once you start with validation
 
-app.use('/app', appRoutes);
+app.use('/', appRoutes);
 
 app.all('*', (req, res, next) => {
   next(

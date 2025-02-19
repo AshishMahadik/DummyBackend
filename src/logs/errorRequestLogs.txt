@@ -1,2 +1,8 @@
 [Tuesday, July 16, 2024 4:29 PM] "GET /" - 400 - 24.556 ms
 [Tuesday, July 16, 2024 4:29 PM] "GET /" - 400 - 7.545 ms
+[Wednesday, February 19, 2025 6:10 PM] "POST /api/auth/login" - 400 - 23.402 ms
+[Wednesday, February 19, 2025 6:11 PM] "POST /api/auth/register" - 400 - 0.835 ms
+[Wednesday, February 19, 2025 6:12 PM] "POST /api/auth/register" - 400 - 3.836 ms
+[Wednesday, February 19, 2025 6:15 PM] "POST /api/auth/register" - 400 - 3.060 ms
+[Wednesday, February 19, 2025 6:17 PM] "POST /api/auth/register" - 400 - 10.627 ms
+[Wednesday, February 19, 2025 6:19 PM] "POST /api/auth/register" - 400 - 9.509 ms

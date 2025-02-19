@@ -5,3 +5,5 @@
 [Tuesday, July 16, 2024 4:33 PM] "GET /email" - 304 - 377.464 ms
 [Tuesday, July 16, 2024 4:33 PM] "GET /email/aniket@gmail.com" - 200 - 1493.013 ms
 [Tuesday, July 16, 2024 4:33 PM] "GET /email/view/66965323eacda2e67ab25349" - 200 - 314.964 ms
+[Wednesday, February 19, 2025 6:15 PM] "POST /api/auth/register" - 201 - 122.374 ms
+[Wednesday, February 19, 2025 6:20 PM] "POST /api/auth/register" - 201 - 122.139 ms
