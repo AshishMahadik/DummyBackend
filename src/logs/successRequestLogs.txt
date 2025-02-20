@@ -8,3 +8,16 @@
 [Wednesday, February 19, 2025 6:15 PM] "POST /api/auth/register" - 201 - 122.374 ms
 [Wednesday, February 19, 2025 6:20 PM] "POST /api/auth/register" - 201 - 122.139 ms
 [Thursday, February 20, 2025 1:09 PM] "POST /api/auth/login" - 200 - 183.325 ms
+[Thursday, February 20, 2025 2:19 PM] "POST /api/auth/login" - 200 - 121.956 ms
+[Thursday, February 20, 2025 2:19 PM] "POST /api/auth/login" - 200 - 87.701 ms
+[Thursday, February 20, 2025 2:19 PM] "POST /api/auth/login" - 200 - 126.648 ms
+[Thursday, February 20, 2025 2:20 PM] "POST /api/auth/register" - 201 - 209.677 ms
+[Thursday, February 20, 2025 2:20 PM] "POST /api/auth/login" - 200 - 157.254 ms
+[Thursday, February 20, 2025 2:23 PM] "POST /api/auth/login" - 200 - 126.088 ms
+[Thursday, February 20, 2025 3:06 PM] "POST /api/auth/register" - 201 - 211.126 ms
+[Thursday, February 20, 2025 3:11 PM] "POST /api/auth/register" - 201 - 126.925 ms
+[Thursday, February 20, 2025 5:09 PM] "POST /api/auth/login" - 200 - 124.635 ms
+[Thursday, February 20, 2025 5:14 PM] "POST /api/auth/login" - 200 - 86.135 ms
+[Thursday, February 20, 2025 5:14 PM] "POST /api/auth/login" - 200 - 94.758 ms
+[Thursday, February 20, 2025 5:15 PM] "POST /api/auth/login" - 200 - 91.771 ms
+[Thursday, February 20, 2025 5:17 PM] "POST /api/auth/login" - 200 - 85.976 ms

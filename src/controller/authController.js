@@ -36,9 +36,10 @@ exports.login = async (req, res) => {
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
         const token = generateToken(user);
         const refreshToken = generateRefreshToken(user);
+        user.refreshToken = refreshToken;
+        user.save();
         res.cookie('rtjwt', refreshToken, {
           httpOnly: true,
           secure: true,
@@ -51,14 +52,51 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.refreshToken = (req, res) => {
-    const { token } = req.body;
-    if (!token) return res.status(401).json({ message: "No refresh token provided" });
+exports.refreshToken = async (req, res) => {
+  const { cookies } = req;
+  if (!cookies?.rtjwt) return res.sendStatus(401);
+  const refreshToken = cookies.rtjwt;
 
-    jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ message: "Invalid refresh token" });
+  const foundUser = await User.findOne({ refreshToken }).exec();
+  if (!foundUser) return res.sendStatus(403); //Forbidden
+  // evaluate jwt
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+    if (err || foundUser.username !== decoded.username)
+      return res.sendStatus(403);
+    const accessToken = jwt.sign(
+      {
+        id: foundUser._id,
+        role: foundUser.role,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '10s' },
+    );
+    res.json({ accessToken });
+  });
+};
 
-        const newToken = generateToken(user);
-        res.json({ token: newToken });
-    });
+exports.logout = async (req, res) => {
+     // On client, also delete the accessToken
+
+     const { cookies } = req;
+     if (!cookies?.jwt) return res.sendStatus(204); //No content
+     const refreshToken = cookies.jwt;
+
+     // Is refreshToken in db?
+     const foundUser = await User.findOne({ refreshToken }).exec();
+     if (!foundUser) {
+       res.clearCookie('rtjwt', {
+         httpOnly: true,
+         sameSite: 'None',
+         secure: true,
+       });
+       return res.sendStatus(204);
+     }
+
+     // Delete refreshToken in db
+     foundUser.refreshToken = '';
+     const result = await foundUser.save();
+
+     res.clearCookie('rtjwt', { httpOnly: true, sameSite: 'None', secure: true });
+     res.sendStatus(204, { result });
 };

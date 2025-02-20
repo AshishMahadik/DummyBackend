@@ -23,7 +23,12 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use('/public', express.static('public'));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:5173', // Specific frontend origin (no '*')
+    credentials: true, // Allow cookies/auth headers
+  }),
+);
 
 app.use(express.json());
 
