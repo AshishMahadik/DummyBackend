@@ -6,6 +6,7 @@ const XSS = require('xss-clean');
 const morgan = require('morgan');
 const passport = require('passport');
 const { StatusCodes } = require('http-status-codes');
+const cookieparser = require('cookie-parser');
 const { ApiError } = require('./utils');
 const { errorHandler, errorConverter } = require('./middleware/error');
 const { JwtStrategy } = require('./middleware/authentication');
@@ -31,6 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 
 app.use(XSS());
+
+app.use(cookieparser());
 
 app.use(logs.success);
 app.use(logs.error);

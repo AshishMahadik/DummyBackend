@@ -7,3 +7,4 @@
 [Tuesday, July 16, 2024 4:33 PM] "GET /email/view/66965323eacda2e67ab25349" - 200 - 314.964 ms
 [Wednesday, February 19, 2025 6:15 PM] "POST /api/auth/register" - 201 - 122.374 ms
 [Wednesday, February 19, 2025 6:20 PM] "POST /api/auth/register" - 201 - 122.139 ms
+[Thursday, February 20, 2025 1:09 PM] "POST /api/auth/login" - 200 - 183.325 ms
