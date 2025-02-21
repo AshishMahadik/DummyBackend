@@ -16,6 +16,7 @@ const limiter = require('./config/apiLimit');
 const logs = require('./config/morgan');
 const appRoutes = require('./routes/index.routes');
 const viewRoutes = require('./routes/view.routes');
+const { userJwtStrategy } = require('./config/passport');
 
 const app = express();
 
@@ -52,6 +53,7 @@ app.use('/', limiter);
 app.use('/', viewRoutes);
 
 // app.use(secureApiWithkey);   // Enables once you start with validation
+passport.use('userJwt', userJwtStrategy);
 
 app.use('/', appRoutes);
 

@@ -21,3 +21,15 @@
 [Thursday, February 20, 2025 5:14 PM] "POST /api/auth/login" - 200 - 94.758 ms
 [Thursday, February 20, 2025 5:15 PM] "POST /api/auth/login" - 200 - 91.771 ms
 [Thursday, February 20, 2025 5:17 PM] "POST /api/auth/login" - 200 - 85.976 ms
+[Friday, February 21, 2025 9:41 AM] "POST /api/auth/login" - 200 - 120.425 ms
+[Friday, February 21, 2025 9:45 AM] "POST /api/auth/login" - 200 - 144.817 ms
+[Friday, February 21, 2025 11:03 AM] "POST /api/auth/login" - 200 - 110.674 ms
+[Friday, February 21, 2025 11:12 AM] "GET /api/auth/refresh-token" - 200 - 31.943 ms
+[Friday, February 21, 2025 11:13 AM] "POST /api/auth/login" - 200 - 128.917 ms
+[Friday, February 21, 2025 11:13 AM] "GET /api/auth/refresh-token" - 200 - 13.606 ms
+[Friday, February 21, 2025 11:14 AM] "GET /api/auth/refresh-token" - 200 - 26.772 ms
+[Friday, February 21, 2025 11:18 AM] "POST /api/auth/login" - 200 - 144.433 ms
+[Friday, February 21, 2025 11:18 AM] "GET /api/auth/refresh-token" - 200 - 16.800 ms
+[Friday, February 21, 2025 12:44 PM] "GET /api/auth/self" - 200 - 6.401 ms
+[Friday, February 21, 2025 1:01 PM] "POST /api/auth/login" - 200 - 114.184 ms
+[Friday, February 21, 2025 1:06 PM] "POST /api/auth/login" - 200 - 205.462 ms
