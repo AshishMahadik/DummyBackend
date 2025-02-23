@@ -3,14 +3,16 @@
 /* eslint-disable nonblock-statement-body-position */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { StatusCodes } = require('http-status-codes');
 const User = require('../models/User');
 const {
   generateAuthTokens,
   generateRefreshToken,
 } = require('../services/jsonwebtoken.service');
 const env = require('../env');
+const { catchAsync } = require('../utils');
 
-exports.register = async (req, res) => {
+const register = catchAsync(async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
@@ -24,9 +26,9 @@ exports.register = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
-};
+});
 
-exports.login = async (req, res) => {
+const login = catchAsync(async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -49,41 +51,34 @@ exports.login = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
-};
+});
 
-exports.refreshToken = async (req, res) => {
+const refreshToken = catchAsync(async (req, res) => {
   const { cookies } = req;
   if (!cookies?.rtjwt) return res.sendStatus(401);
-  const refreshToken = cookies.rtjwt;
+  const cookieRefreshToken = cookies.rtjwt;
 
-  const foundUser = await User.findOne({ refreshToken }).exec();
+  const foundUser = await User.findOne({ cookieRefreshToken }).exec();
   if (!foundUser) return res.sendStatus(403); //Forbidden
   // evaluate jwt
-  jwt.verify(refreshToken, env, (err, decoded) => {
-    if (err || foundUser.name !== decoded.name) {
+  jwt.verify(cookieRefreshToken, env.jwt.secret, async (err, decoded) => {
+    if (err || String(foundUser._id) !== decoded.sub) {
       return res.sendStatus(403);
     }
-    const accessToken = jwt.sign(
-      {
-        id: foundUser._id,
-        role: foundUser.role,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '15m' },
-    );
-    res.json({ accessToken });
+    const { token } = await generateAuthTokens({ user: foundUser });
+    res.json({ accessToken: token });
   });
-};
+});
 
-exports.logout = async (req, res) => {
+const logout = catchAsync(async (req, res) => {
   // On client, also delete the accessToken
 
   const { cookies } = req;
   if (!cookies?.jwt) return res.sendStatus(204); //No content
-  const refreshToken = cookies.jwt;
+  const cookieRefreshToken = cookies.jwt;
 
   // Is refreshToken in db?
-  const foundUser = await User.findOne({ refreshToken }).exec();
+  const foundUser = await User.findOne({ cookieRefreshToken }).exec();
   if (!foundUser) {
     res.clearCookie('rtjwt', {
       httpOnly: true,
@@ -99,8 +94,16 @@ exports.logout = async (req, res) => {
 
   res.clearCookie('rtjwt', { httpOnly: true, sameSite: 'None', secure: true });
   res.sendStatus(204, { result });
-};
+});
 
-exports.self = async (req, res) => {
-  res.send('Hi');
+const self = catchAsync(async (req, res) => {
+  res.status(StatusCodes.OK).json({ user: req.user });
+});
+
+module.exports = {
+  register,
+  login,
+  refreshToken,
+  logout,
+  self
 };

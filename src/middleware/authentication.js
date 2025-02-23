@@ -31,7 +31,9 @@ const userAuth = () => async (req, res, next) =>
       },
       verifyCallback(req, resolve, reject, 'user'),
     )(req, res, next);
-  });
+  })
+    .then(() => next())
+    .catch((err) => next(err));
 
 const JwtStrategy = (Passport) => {
   Passport.use('userJwt', userJwtStrategy);

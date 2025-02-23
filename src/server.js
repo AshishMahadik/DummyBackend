@@ -17,7 +17,6 @@ mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbName:"Dummy"
   })
   .then(() => {
     logger.info(`Connected to MongoDB => ${env.mongoose.url}`);

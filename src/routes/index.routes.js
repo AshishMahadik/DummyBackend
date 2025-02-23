@@ -2,8 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
-const authRoutes = require("./authRoutes");
-const employeeRoutes = require("./employeeRoutes");
+const authRoutes = require('./auth.routes');
+const employeeRoutes = require('./employee.routes');
 
 const appRoutes = [
   {

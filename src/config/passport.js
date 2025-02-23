@@ -10,13 +10,13 @@ const jwtOptions = {
 // write jwtverify methods for user seperatly
 const userJwtVerify = async (payload, done) => {
   try {
-    const user = await User.findById(payload._id);
+    const user = await User.findById(payload.sub);
 
     if (!user || user.deleted) {
       return done(null, false);
     }
 
-    done(null, true);
+    done(null, user);
   } catch (err) {
     done(err, false);
   }
