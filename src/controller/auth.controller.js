@@ -45,7 +45,7 @@ const login = catchAsync(async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: 'None',
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000 * 30,
     });
     res.json({ token, user });
   } catch (error) {
@@ -58,7 +58,7 @@ const refreshToken = catchAsync(async (req, res) => {
   if (!cookies?.rtjwt) return res.sendStatus(401);
   const cookieRefreshToken = cookies.rtjwt;
 
-  const foundUser = await User.findOne({ cookieRefreshToken }).exec();
+  const foundUser = await User.findOne({ refreshToken: cookieRefreshToken }).exec();
   if (!foundUser) return res.sendStatus(403); //Forbidden
   // evaluate jwt
   jwt.verify(cookieRefreshToken, env.jwt.secret, async (err, decoded) => {
