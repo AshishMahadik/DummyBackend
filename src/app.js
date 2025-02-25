@@ -12,7 +12,7 @@ const { errorHandler, errorConverter } = require('./middleware/error');
 const { JwtStrategy } = require('./middleware/authentication');
 // const { secureApiWithkey } = require('./middleware/apiValidation');
 
-const limiter = require('./config/apiLimit');
+// const limiter = require('./config/apiLimit');
 const logs = require('./config/morgan');
 const appRoutes = require('./routes/index.routes');
 const viewRoutes = require('./routes/view.routes');
@@ -47,7 +47,7 @@ app.use(morgan('dev'));
 app.use(passport.initialize());
 JwtStrategy(passport);
 
-app.use('/', limiter);
+// app.use('/', limiter);
 
 app.use('/', viewRoutes);
 

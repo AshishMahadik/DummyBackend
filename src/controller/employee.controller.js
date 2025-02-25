@@ -3,10 +3,6 @@ const { catchAsync } = require('../utils');
 
 const createEmployee = catchAsync(async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Access denied. Admins only.' });
-    }
-
     // eslint-disable-next-line object-curly-newline
     const { name, email, position, department, salary } = req.body;
     const existingEmployee = await Employee.findOne({ email });

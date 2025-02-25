@@ -66,7 +66,7 @@ const refreshToken = catchAsync(async (req, res) => {
       return res.sendStatus(403);
     }
     const { token } = await generateAuthTokens({ user: foundUser });
-    res.json({ accessToken: token });
+    res.json({ accessToken: token, user: foundUser });
   });
 });
 
