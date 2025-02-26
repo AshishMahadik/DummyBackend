@@ -17,14 +17,20 @@ const register = catchAsync(async (req, res) => {
     const { name, email, password } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser)
-      return res.status(400).json({ message: 'User already exists' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: 'User already exists' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
 
-    res.status(201).json({ message: 'User registered successfully', user });
+    res
+      .status(StatusCodes.CREATED)
+      .json({ message: 'User registered successfully', user });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Server error' });
   }
 });
 
@@ -32,7 +38,10 @@ const login = catchAsync(async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+    if (!user)
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
@@ -49,21 +58,30 @@ const login = catchAsync(async (req, res) => {
     });
     res.json({ token, user });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Server error' });
   }
 });
 
 const refreshToken = catchAsync(async (req, res) => {
   const { cookies } = req;
-  if (!cookies?.rtjwt) return res.sendStatus(401);
+  if (!cookies?.rtjwt) return res.sendStatus(StatusCodes.UNAUTHORIZED);
   const cookieRefreshToken = cookies.rtjwt;
 
-  const foundUser = await User.findOne({ refreshToken: cookieRefreshToken }).exec();
-  if (!foundUser) return res.sendStatus(403); //Forbidden
+  const foundUser = await User.findOne({
+    refreshToken: cookieRefreshToken,
+  }).exec();
+  if (!foundUser) return res.sendStatus(StatusCodes.FORBIDDEN); //Forbidden
   // evaluate jwt
   jwt.verify(cookieRefreshToken, env.jwt.secret, async (err, decoded) => {
     if (err || String(foundUser._id) !== decoded.sub) {
-      return res.sendStatus(403);
+      res.clearCookie('rtjwt', {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+      });
+      return res.sendStatus(StatusCodes.FORBIDDEN);
     }
     const { token } = await generateAuthTokens({ user: foundUser });
     res.json({ accessToken: token, user: foundUser });
@@ -71,29 +89,29 @@ const refreshToken = catchAsync(async (req, res) => {
 });
 
 const logout = catchAsync(async (req, res) => {
-  // On client, also delete the accessToken
-
   const { cookies } = req;
-  if (!cookies?.jwt) return res.sendStatus(204); //No content
-  const cookieRefreshToken = cookies.jwt;
+  if (!cookies?.rtjwt) return res.sendStatus(StatusCodes.NO_CONTENT);
+  const cookieRefreshToken = cookies.rtjwt;
 
-  // Is refreshToken in db?
-  const foundUser = await User.findOne({ cookieRefreshToken }).exec();
+  const foundUser = await User.findOne({
+    refreshToken: cookieRefreshToken,
+  }).exec();
+
   if (!foundUser) {
     res.clearCookie('rtjwt', {
       httpOnly: true,
       sameSite: 'None',
       secure: true,
     });
-    return res.sendStatus(204);
+    return res.sendStatus(StatusCodes.NO_CONTENT);
   }
 
   // Delete refreshToken in db
   foundUser.refreshToken = '';
-  const result = await foundUser.save();
+  const user = await foundUser.save();
 
   res.clearCookie('rtjwt', { httpOnly: true, sameSite: 'None', secure: true });
-  res.sendStatus(204, { result });
+  res.sendStatus(StatusCodes.OK, { user });
 });
 
 const self = catchAsync(async (req, res) => {
@@ -105,5 +123,5 @@ module.exports = {
   login,
   refreshToken,
   logout,
-  self
+  self,
 };

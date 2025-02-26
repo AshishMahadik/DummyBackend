@@ -177,3 +177,13 @@
 [Tuesday, February 25, 2025 4:16 PM] "POST /api/employee" - 400 - 3.337 ms
 [Tuesday, February 25, 2025 4:17 PM] "POST /api/employees" - 401 - 10.086 ms
 [Tuesday, February 25, 2025 4:17 PM] "POST /api/employees" - 403 - 704.858 ms
+[Wednesday, February 26, 2025 9:51 AM] "GET /api/auth/refresh-token" - 401 - 0.790 ms
+[Wednesday, February 26, 2025 9:51 AM] "GET /api/auth/refresh-token" - 401 - 1.084 ms
+[Wednesday, February 26, 2025 9:51 AM] "GET /api/auth/refresh-token" - 401 - 2.340 ms
+[Wednesday, February 26, 2025 10:03 AM] "GET /api/auth/refresh-token" - 401 - 3.170 ms
+[Wednesday, February 26, 2025 10:15 AM] "GET /api/auth/refresh-token" - 403 - 230.278 ms
+[Wednesday, February 26, 2025 10:15 AM] "GET /api/auth/refresh-token" - 403 - 231.864 ms
+[Wednesday, February 26, 2025 10:17 AM] "GET /api/auth/refresh-token" - 403 - 217.802 ms
+[Wednesday, February 26, 2025 10:17 AM] "GET /api/auth/refresh-token" - 403 - 214.991 ms
+[Wednesday, February 26, 2025 12:42 PM] "GET /api/auth/refresh-token" - 401 - 0.737 ms
+[Wednesday, February 26, 2025 1:04 PM] "GET /api/auth/refresh-token" - 401 - 4.225 ms
