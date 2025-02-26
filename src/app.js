@@ -13,7 +13,6 @@ const { JwtStrategy } = require('./middleware/authentication');
 // const { secureApiWithkey } = require('./middleware/apiValidation');
 
 // const limiter = require('./config/apiLimit');
-const logs = require('./config/morgan');
 const appRoutes = require('./routes/index.routes');
 const viewRoutes = require('./routes/view.routes');
 
@@ -40,8 +39,8 @@ app.use(XSS());
 
 app.use(cookieparser());
 
-app.use(logs.success);
-app.use(logs.error);
+// app.use(logs.success);
+// app.use(logs.error);
 app.use(morgan('dev'));
 
 app.use(passport.initialize());

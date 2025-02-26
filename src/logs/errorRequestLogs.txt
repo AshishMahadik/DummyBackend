@@ -187,3 +187,4 @@
 [Wednesday, February 26, 2025 10:17 AM] "GET /api/auth/refresh-token" - 403 - 214.991 ms
 [Wednesday, February 26, 2025 12:42 PM] "GET /api/auth/refresh-token" - 401 - 0.737 ms
 [Wednesday, February 26, 2025 1:04 PM] "GET /api/auth/refresh-token" - 401 - 4.225 ms
+[Wednesday, February 26, 2025 3:26 PM] "GET /api/auth/refresh-token" - 401 - 1.821 ms
