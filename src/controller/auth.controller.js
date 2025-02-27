@@ -23,6 +23,7 @@ const register = catchAsync(async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
+    user.password = undefined;
 
     res
       .status(StatusCodes.CREATED)
@@ -37,7 +38,7 @@ const register = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('+password');
     if (!user)
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -49,7 +50,8 @@ const login = catchAsync(async (req, res) => {
     const { token } = await generateAuthTokens({ user: user });
     const { token: refreshToken } = await generateRefreshToken({ user: user });
     user.refreshToken = refreshToken;
-    user.save();
+    await user.save();
+    user.password = undefined;
     res.cookie('rtjwt', refreshToken, {
       httpOnly: true,
       secure: true,
