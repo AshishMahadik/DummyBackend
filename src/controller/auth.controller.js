@@ -4,6 +4,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { StatusCodes } = require('http-status-codes');
+const moment = require('moment');
 const User = require('../models/User');
 const {
   generateAuthTokens,
@@ -11,6 +12,8 @@ const {
 } = require('../services/jsonwebtoken.service');
 const env = require('../env');
 const { catchAsync } = require('../utils');
+const { sessionService } = require('../services');
+const { Session } = require('../models');
 
 const register = catchAsync(async (req, res) => {
   try {
@@ -38,27 +41,36 @@ const register = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   try {
     const { email, password } = req.body;
+
     const user = await User.findOne({ email }).select('+password');
-    if (!user)
+    if (!user) {
       return res
         .status(StatusCodes.BAD_REQUEST)
         .json({ message: 'Invalid credentials' });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
+    if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
+    }
+    user.password = undefined;
+
     const { token } = await generateAuthTokens({ user: user });
     const { token: refreshToken } = await generateRefreshToken({ user: user });
-    user.refreshToken = refreshToken;
-    await user.save();
-    user.password = undefined;
+
+    await sessionService.createSession({
+      userId: user._id,
+      refreshToken,
+      expiresAt: new Date(moment().add(env.jwt.refreshExpireIn, 'minutes')),
+    });
+
     res.cookie('rtjwt', refreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: 'None',
       maxAge: 24 * 60 * 60 * 1000 * 30,
     });
-    res.json({ token, user });
+    res.status(StatusCodes.OK).json({ token, user });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -68,52 +80,49 @@ const login = catchAsync(async (req, res) => {
 
 const refreshToken = catchAsync(async (req, res) => {
   const { cookies } = req;
-  if (!cookies?.rtjwt) return res.sendStatus(StatusCodes.UNAUTHORIZED);
+  if (!cookies?.rtjwt) return res.status(StatusCodes.UNAUTHORIZED).json({});
   const cookieRefreshToken = cookies.rtjwt;
 
-  const foundUser = await User.findOne({
+  const session = await Session.findOne({
     refreshToken: cookieRefreshToken,
   }).exec();
-  if (!foundUser) return res.sendStatus(StatusCodes.FORBIDDEN); //Forbidden
+  if (!session) return res.status(StatusCodes.FORBIDDEN);
+
+  const foundUser = await User.findById(session.userId).exec();
+  if (!foundUser) return res.status(StatusCodes.FORBIDDEN).json({});
+
   // evaluate jwt
   jwt.verify(cookieRefreshToken, env.jwt.secret, async (err, decoded) => {
     if (err || String(foundUser._id) !== decoded.sub) {
+      await Session.deleteOne({ _id: session._id }).exec();
       res.clearCookie('rtjwt', {
         httpOnly: true,
         sameSite: 'None',
         secure: true,
       });
-      return res.sendStatus(StatusCodes.FORBIDDEN);
+      return res.status(StatusCodes.FORBIDDEN).json({});
     }
     const { token } = await generateAuthTokens({ user: foundUser });
-    res.json({ accessToken: token, user: foundUser });
+    res.status(StatusCodes.OK).json({ accessToken: token, user: foundUser });
   });
 });
 
 const logout = catchAsync(async (req, res) => {
   const { cookies } = req;
-  if (!cookies?.rtjwt) return res.sendStatus(StatusCodes.NO_CONTENT);
+  if (!cookies?.rtjwt) return res.status(StatusCodes.NO_CONTENT);
   const cookieRefreshToken = cookies.rtjwt;
 
-  const foundUser = await User.findOne({
-    refreshToken: cookieRefreshToken,
-  }).exec();
+  // Delete the session
+  await Session.deleteOne({ refreshToken: cookieRefreshToken }).exec();
 
-  if (!foundUser) {
-    res.clearCookie('rtjwt', {
-      httpOnly: true,
-      sameSite: 'None',
-      secure: true,
-    });
-    return res.sendStatus(StatusCodes.NO_CONTENT);
-  }
+  // Clear refresh token from cookies
+  res.clearCookie('rtjwt', {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+  });
 
-  // Delete refreshToken in db
-  foundUser.refreshToken = '';
-  const user = await foundUser.save();
-
-  res.clearCookie('rtjwt', { httpOnly: true, sameSite: 'None', secure: true });
-  res.sendStatus(StatusCodes.OK, { user });
+  res.status(StatusCodes.OK).json({});
 });
 
 const self = catchAsync(async (req, res) => {

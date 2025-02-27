@@ -27,6 +27,7 @@
     "quotes": "off",
     "indent": "off",
     "no-multi-spaces": "off",
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "operator-linebreak": "off"
   }
 }
