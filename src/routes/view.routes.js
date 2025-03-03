@@ -10,6 +10,4 @@ router.route('/email/:email').get(viewController.emailList);
 
 router.route('/email/view/:id').get(viewController.emailView);
 
-
-
 module.exports = router;

@@ -6,7 +6,7 @@ const EmployeeSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     position: { type: String, required: true },
     department: { type: String },
-    salary: { type: Number, required: true },
+    salary: { type: String, required: true },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // To track who created the employee
   },
   { timestamps: true },

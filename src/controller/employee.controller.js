@@ -50,10 +50,6 @@ const getEmployeeById = catchAsync(async (req, res) => {
 // ✅ Update Employee
 const updateEmployee = catchAsync(async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Access denied. Admins only.' });
-    }
-
     const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
@@ -70,10 +66,6 @@ const updateEmployee = catchAsync(async (req, res) => {
 // ✅ Delete Employee
 const deleteEmployee = catchAsync(async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Access denied. Admins only.' });
-    }
-
     const employee = await Employee.findByIdAndDelete(req.params.id);
     if (!employee) {
       return res.status(404).json({ message: 'Employee not found' });
